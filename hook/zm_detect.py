@@ -235,6 +235,7 @@ def main_handler():
 
     ap.add_argument('-n', '--notes', help='updates notes field in ZM with detections', action='store_true')
     ap.add_argument('-d', '--debug', help='enables debug on console', action='store_true')
+    ap.add_argument('--frameset', help='Override frame_set in config')
 
     args, u = ap.parse_known_args()
     args = vars(args)
@@ -354,6 +355,9 @@ def main_handler():
         g.logger.Debug(2,'using stream_sequence')
         stream_options = g.config['stream_sequence']
         stream_options = ast.literal_eval(stream_options)
+        if args.get('frameset'):
+            stream_options['frame_set'] = args.get('frameset')
+            g.logger.Debug(2,'Using frme_set from args.')
     else: # legacy
         g.logger.Debug(2,'mapping legacy stream data from config')
         if g.config['detection_mode'] == 'all':
